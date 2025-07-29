@@ -11,7 +11,11 @@ st.title("📈 Momentum Stock Scanner")
 
 # --- Sidebar Filters ---
 st.sidebar.header("Filter Criteria")
-exchange = st.sidebar.selectbox("Exchange", ["NASDAQ", "NYSE"], index=0)
+exchange = st.sidebar.selectbox(
+    "Exchange",
+    ["NASDAQ", "NYSE", "AMEX", "LSE", "TSX", "EURONEXT", "HKG", "CRYPTO"],
+    index=0
+)
 min_change = st.sidebar.slider("Min % Change", 1.0, 10.0, 3.0)
 volume_multiplier = st.sidebar.slider("Min Volume Spike (x Avg Vol)", 1.0, 10.0, 2.0)
 rsi_range = st.sidebar.slider("RSI Range", 0, 100, (30, 70))
@@ -42,9 +46,11 @@ def scan_momentum_stocks(tickers):
         quote = get_quote(ticker)
         rsi = get_rsi(ticker)
         if quote and rsi:
-            if (quote['volume'] > volume_multiplier * quote['avgVolume'] and
+            if (
+                quote['volume'] > volume_multiplier * quote['avgVolume'] and
                 quote['changesPercentage'] > min_change and
-                rsi_range[0] <= rsi <= rsi_range[1]):
+                rsi_range[0] <= rsi <= rsi_range[1]
+            ):
                 results.append({
                     'Ticker': ticker,
                     'Price': quote['price'],
